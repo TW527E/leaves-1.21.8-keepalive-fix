@@ -1,12 +1,16 @@
-From 896073f3cc52bb64966429fcd90fa85e337f58ce Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: TW527E <tw527e@users.noreply.github.com>
-Date: Fri, 11 Sep 2026 18:46:18 +0800
+Date: Fri, 11 Sep 2026 21:00:00 +0800
 Subject: [PATCH] Reset pending keepalive state on listener handoff
 
----
- io/papermc/paper/util/KeepAlive.java            | 17 +++++++++++++++++
- .../network/ServerCommonPacketListenerImpl.java | 10 +++++++++-
- 2 files changed, 26 insertions(+), 1 deletion(-)
+When a player listener is transferred between connection phases, do not
+carry pending keepalive challenges into the new listener. The old listener
+can still deliver a response after the handoff, which the new listener
+otherwise reports as out-of-order and disconnects.
+
+Keep the latency history and transmission timestamp so the handoff does not
+reset useful measurements, while isolating pending challenges to the active
+listener.
 
 diff --git a/io/papermc/paper/util/KeepAlive.java b/io/papermc/paper/util/KeepAlive.java
 index 4a2520f..66d6af2 100644
@@ -44,10 +48,10 @@ index 4a2520f..66d6af2 100644
              long currTime = response.txTimeNS;
  
 diff --git a/net/minecraft/server/network/ServerCommonPacketListenerImpl.java b/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
-index f02800e..451fe0e 100644
+index 72021b3..dde892d 100644
 --- a/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
-@@ -459,6 +459,14 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
+@@ -488,6 +488,14 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
      }
  
      protected CommonListenerCookie createCookie(ClientInformation clientInformation) {
@@ -65,4 +69,3 @@ index f02800e..451fe0e 100644
  }
 -- 
 2.54.0 (Apple Git-157)
-

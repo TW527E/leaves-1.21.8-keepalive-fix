@@ -12,8 +12,15 @@ upstream by Paper PR #13712.
 
 ## Current status
 
-The upstream fix has been prepared as `leaves-server/paper-patches/features/
-0017-Keepalive-listener-handoff.patch`. It must pass `./gradlew applyAllPatches`
-and `./gradlew createMojmapLeavesclipJar` before any server deployment.
+The fix is prepared as `leaves-server/minecraft-patches/features/
+0142-Keepalive-listener-handoff.patch`. It passes `./gradlew applyAllPatches`
+and `./gradlew createMojmapLeavesclipJar`.
 
-Do not replace the live server JAR from this repository until those checks pass.
+The verified server artifact is:
+`leaves-server/build/libs/leaves-server-1.21.8-R0.1-SNAPSHOT.jar`
+
+The Leavesclip distribution artifact is:
+`leaves-server/build/libs/leaves-leavesclip-1.21.8-R0.1-SNAPSHOT-mojmap.jar`
+
+The live Server 1 and Server 2 instances have not been replaced or restarted
+by this repository yet.
